@@ -57,6 +57,9 @@ INSTALLED_APPS = [
     'core',
     'dj_database_url',
     'django_extensions',
+    'martor',
+    'taggit',
+    'blog',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +78,9 @@ ROOT_URLCONF = 'django_boilerplate.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, "templates")
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -171,3 +176,7 @@ STATIC_HOST = env('DJANGO_STATIC_HOST')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = STATIC_HOST + '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), )
+
+TAGGIT_CASE_INSENSITIVE = False
+MARTOR_ENABLE_LABEL = True
