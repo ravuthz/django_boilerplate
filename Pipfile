@@ -7,6 +7,11 @@ verify_ssl = true
 
 [packages]
 django = "*"
+whitenoise = {extras = ["brotli"], version = "*"}
+gunicorn = "*"
+dj-database-url = "*"
+django-extensions = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"
