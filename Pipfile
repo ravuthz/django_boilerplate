@@ -12,6 +12,8 @@ gunicorn = "*"
 dj-database-url = "*"
 django-extensions = "*"
 psycopg2 = "*"
+martor = "*"
+django-taggit = "*"
 
 [requires]
 python_version = "3.7"

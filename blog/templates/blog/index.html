@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  {% url 'post_tags' tag as post_tags_url %}
+  {% url 'post_archives' as post_archives_url %}
+
+  <div class="jumbotron">
+    <div class="container">
+      {% if request.path == post_archives_url %}
+        <h1 class="display-3">Archived Posts</h1>
+      {% elif request.path == post_tags_url %}
+        <h1 class="display-3">Posts with tags `{{ tag }}`</h1>
+      {% else %}
+        <h1 class="display-3">Hello, world!</h1>
+        <p>This is a template for a simple marketing or informational website. It includes a large callout
+            called a jumbotron and three supporting pieces of content. Use it as a starting point to create
+            something more unique.</p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row">
+    {% for object in object_list %}
+      <div class="col-md-4 post-item">
+        <h2><a href="{% url 'post_details' slug=object.slug %}" title="{{ object.title|title }}">{{ object.title|title|truncatechars:20 }}</a></h2>
+        <p title="{{ object.created_at|timesince }} ago">Posted on {{ object.created_at|date:'F j, Y \a\t h:m A'  }}</p>
+        <p class="text-justify meta">{{ object.body|safe|truncatechars_html:200 }}</p>
+        <p>
+          {% for tag in object.tags.all %}
+            <a class="badge badge-primary" href="{% url 'post_tags' tag=tag %}">{{ tag }}</a>
+            {% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+        <a class="btn btn-secondary" href="{% url 'post_details' slug=object.slug %}" role="button">View details &raquo;</a>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

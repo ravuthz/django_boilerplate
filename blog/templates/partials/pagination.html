@@ -1,0 +1,55 @@
+<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+    {% if object_list.has_previous %}
+        <div class="btn-group mr-2" role="group">
+            <a class="btn btn-primary" href="?page=1">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div class="btn-group mr-2" role="group">
+            <a class="btn btn-primary" href="?page={{ object_list.previous_page_number }}">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </a>
+        </div>  
+    {% else %}
+        <div class="btn-group mr-2" role="group">
+            <button class="btn btn-primary" disabled>
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="btn-group mr-2" role="group">
+            <button class="btn btn-primary" disabled>
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </button>
+        </div>
+    {% endif %}
+
+    <div class="btn-group mr-2" role="group">
+        <button class="btn btn-primary" disabled>
+            {{ object_list.number }} &nbsp;/&nbsp; {{ object_list.paginator.num_pages }}
+        </button>
+    </div>
+
+    {% if object_list.has_next %}
+        <div class="btn-group mr-2" role="group">
+            <a class="btn btn-primary" href="?page={{ object_list.next_page_number }}">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div class="btn-group mr-2" role="group">
+            <a class="btn btn-primary" href="?page={{ object_list.paginator.num_pages }}">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            </a>
+        </div>
+    {% else %}
+        <div class="btn-group mr-2" role="group">
+            <button class="btn btn-primary" disabled>
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="btn-group mr-2" role="group">
+            <button class="btn btn-primary" disabled>
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            </button>
+        </div>
+    {% endif %}
+</div>
