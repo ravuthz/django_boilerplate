@@ -14,6 +14,11 @@ from pathlib import Path
 
 import dj_database_url
 
+os.environ.setdefault('DEBUG', 'False')
+os.environ.setdefault('ADMIN_URL', 'admin/')
+os.environ.setdefault('ALLOWED_HOSTS', '*')
+os.environ.setdefault('DJANGO_STATIC_HOST', '')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -26,7 +31,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG'] == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(" ")
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
 
 # Application definition
 
@@ -125,7 +130,7 @@ USE_TZ = True
 
 WHITENOISE_INDEX_FILE = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_HOST = os.environ.get('DJANGO_STATIC_HOST', '')
+STATIC_HOST = os.environ.get('DJANGO_STATIC_HOST')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
