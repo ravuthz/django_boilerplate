@@ -16,6 +16,7 @@ import dj_database_url
 
 os.environ.setdefault('DEBUG', 'False')
 os.environ.setdefault('ADMIN_URL', 'admin/')
+os.environ.setdefault('SECRET_KEY', 'ar+w^q6&m!wfjr%2@k!y$l5uzj@4pi%f!vk00v8jk(w8761e2')
 os.environ.setdefault('ALLOWED_HOSTS', '*')
 os.environ.setdefault('DJANGO_STATIC_HOST', '')
 
@@ -47,6 +48,12 @@ INSTALLED_APPS = [
     'core',
     'dj_database_url',
     'django_extensions',
+    # Add Rest Framework with OAuth 2
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'oauth2_provider',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware'
 ]
 
 ROOT_URLCONF = 'django_boilerplate.urls'
@@ -135,3 +144,35 @@ STATIC_HOST = os.environ.get('DJANGO_STATIC_HOST')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = STATIC_HOST + '/static/'
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.MultiPartParser",
+        "rest_framework.parsers.FileUploadParser",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 2,
+}
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+OAUTH2_PROVIDER = {
+    "SCOPES": {"read": "Read scope", "write": "Write scope", },
+    # Set all request and authentication use JSON with Raw
+    "OAUTH2_BACKEND_CLASS": "oauth2_provider.oauth2_backends.JSONOAuthLibCore",
+}

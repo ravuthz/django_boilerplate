@@ -12,6 +12,10 @@ gunicorn = "*"
 dj-database-url = "*"
 django-extensions = "*"
 psycopg2 = "*"
+djangorestframework = "*"
+django-rest-auth = "*"
+django-oauth-toolkit = "*"
+django-cors-middleware = "*"
 
 [requires]
 python_version = "3.7"
