@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'rest_auth',
     'oauth2_provider',
     'corsheaders',
+    # Add Swagger for Rest Framework
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -148,8 +150,9 @@ STATIC_URL = STATIC_HOST + '/static/'
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
+        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -165,6 +168,7 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.MultiPartParser",
         "rest_framework.parsers.FileUploadParser",
     ],
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 2,
 }
@@ -172,7 +176,35 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 OAUTH2_PROVIDER = {
-    "SCOPES": {"read": "Read scope", "write": "Write scope", },
+    "SCOPES": {
+        "read": "Read scope",
+        "write": "Write scope",
+        "admin": "Grands read and write access to administrative information"
+    },
     # Set all request and authentication use JSON with Raw
-    "OAUTH2_BACKEND_CLASS": "oauth2_provider.oauth2_backends.JSONOAuthLibCore",
+    # "OAUTH2_BACKEND_CLASS": "oauth2_provider.oauth2_backends.JSONOAuthLibCore",
+}
+
+SWAGGER_SETTINGS = {
+    "USE_SESSION_AUTH": False,
+    "OAUTH2_CONFIG": {
+        "appName": os.environ.get("API_NAME"),
+        "clientId": os.environ.get("CLIENT_ID"),
+        "clientSecret": os.environ.get("CLIENT_SECRET"),
+    },
+    "SECURITY_DEFINITIONS": {
+        # "basic": {"type": "basic"},
+        # "api_key": {"type": "apiKey", "name": "Authorization", "in": "header"},
+        "oauth2": {
+            "type": "oauth2",
+            "flow": "password",
+            "tokenUrl": os.environ.get("TOKEN_URL"),
+            "scopes": OAUTH2_PROVIDER.get("SCOPES"),
+        }
+    },
+    # "APIS_SORTER": "alpha",
+    "DOC_EXPANSION": "list",
+    "JSON_EDITOR": True,
+    "OPERATIONS_SORTER": "method",
+    "SHOW_REQUEST_HEADERS": True,
 }
