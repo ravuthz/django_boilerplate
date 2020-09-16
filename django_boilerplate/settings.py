@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Applications defined here
+    'constance',
+    'constance.backends.database',
     'core',
     'dj_database_url',
     'django_extensions',
@@ -129,6 +131,33 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 WHITENOISE_INDEX_FILE = True
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_ADDITIONAL_FIELDS = {
+    'image_field': ['django.forms.ImageField', {}],
+    'yes_no_null_select': ['django.forms.fields.ChoiceField', {
+        'widget': 'django.forms.Select',
+        'choices': ((None, "-----"), ("yes", "Yes"), ("no", "No"))
+    }],
+}
+
+CONSTANCE_CONFIG = {
+    'SITE_NAME': ('My Title', 'Website title'),
+    'SITE_DESCRIPTION': ('My Description', 'Website description'),
+    'LOGO_IMAGE': ('logo.png', 'Company logo', 'image_field'),
+    'MY_SELECT_KEY': ('yes', 'select yes or no', 'yes_no_null_select'),
+    'THEME': ('light-blue', 'Website theme'),
+}
+
+CONSTANCE_CONFIG_FIELDSETS = {
+    'Site Options': {
+        'fields': ('SITE_NAME', 'SITE_DESCRIPTION', 'LOGO_IMAGE', 'MY_SELECT_KEY'),
+        'collapse': True
+    },
+    'Theme Options': ('THEME',),
+}
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_HOST = os.environ.get('DJANGO_STATIC_HOST')
 

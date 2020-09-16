@@ -12,6 +12,8 @@ gunicorn = "*"
 dj-database-url = "*"
 django-extensions = "*"
 psycopg2 = "*"
+django-constance = {extras = ["database"], version = "*"}
+django-picklefield = "*"
 
 [requires]
 python_version = "3.7"
