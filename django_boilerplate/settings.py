@@ -10,14 +10,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
+from environ import Env
 
-import dj_database_url
+env = Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    ADMIN_URL=(str, 'admin/'),
+    TIME_ZONE=(str, 'Asia/Phnom_Penh'),
+    SECRET_KEY=(str, 'S3cRétH3rë'),
+    LANGUAGE_CODE=(str, 'en-us'),
+    ALLOWED_HOSTS=(str, '* '),
+    DJANGO_STATIC_HOST=(str, '')
+)
 
-os.environ.setdefault('DEBUG', 'False')
-os.environ.setdefault('ADMIN_URL', 'admin/')
-os.environ.setdefault('ALLOWED_HOSTS', '*')
-os.environ.setdefault('DJANGO_STATIC_HOST', '')
+Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -26,12 +34,12 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ['DEBUG'] == 'True'
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(" ")
 
 # Application definition
 
@@ -86,14 +94,13 @@ WSGI_APPLICATION = 'django_boilerplate.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # },
-    'default': dj_database_url.config(
-        conn_max_age=600,
-        default=BASE_DIR / 'db.sqlite3'
-    )
+    'default': env.db(),
+    'extra': env.db('SQLITE_URL', default='sqlite:////tmp/db.sqlite3'),
+}
+
+CACHES = {
+    'default': env.cache(),
+    'redis': env.cache('REDIS_URL')
 }
 
 # Password validation
@@ -117,9 +124,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = env('LANGUAGE_CODE')
 
-TIME_ZONE = 'Asia/Phnom_Penh'
+TIME_ZONE = env('TIME_ZONE')
 
 USE_I18N = True
 
@@ -159,7 +166,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
 }
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_HOST = os.environ.get('DJANGO_STATIC_HOST')
+STATIC_HOST = env('DJANGO_STATIC_HOST')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
