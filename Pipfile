@@ -15,6 +15,7 @@ psycopg2 = "*"
 django-constance = {extras = ["database"], version = "*"}
 django-picklefield = "*"
 django-environ = "*"
+django-material-admin = "*"
 
 [requires]
 python_version = "3.7"
